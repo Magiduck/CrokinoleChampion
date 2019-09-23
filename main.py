@@ -17,9 +17,11 @@ while True:  # Event Loop
     print(event, values)
     if event in (None, 'Exit'):
         break
+    # If the user has clicked on 'create matches'
     if event == '_CREATEMATCHES_':
-        matches = CCLogic.create_matches(values['_CONTESTANTSIN_'], values['_HALFSEASON_'], values['_FULLSEASON_'])
-        # change the "output" element to be the value of "input" element
+        # Get the matches
+        matches = CCLogic.create_match_schedule(values['_CONTESTANTSIN_'], values['_HALFSEASON_'], values['_FULLSEASON_'])
+        # Update the multiline text output with the matches
         window['_CONTESTANTSOUT_'].Update(matches)
 
 
