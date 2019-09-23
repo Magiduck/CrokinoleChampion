@@ -1,5 +1,5 @@
 import PySimpleGUI as sg
-import CCLogic
+import Matches
 
 sg.change_look_and_feel('Reddit')
 
@@ -11,19 +11,25 @@ layout = [[sg.Multiline(size=(20, 20), key='_CONTESTANTSIN_'),
 
 window = sg.Window('CrokinoleChampion', layout)
 
+matches = []
 
 while True:  # Event Loop
     event, values = window.Read()
     print(event, values)
     if event in (None, 'Exit'):
         break
+
     # If the user has clicked on 'create matches'
     if event == '_CREATEMATCHES_':
         # Get the matches
-        matches = CCLogic.create_match_schedule(values['_CONTESTANTSIN_'], values['_HALFSEASON_'], values['_FULLSEASON_'])
-        # Update the multiline text output with the matches
-        window['_CONTESTANTSOUT_'].Update(matches)
+        output_text, matches = Matches.create_match_schedule(values['_CONTESTANTSIN_'], values['_HALFSEASON_'], values['_FULLSEASON_'])
 
+        # Update the multiline text output with the matches
+        window['_CONTESTANTSOUT_'].Update(output_text)
+
+    elif event == '_SHUFFLE_':
+        output_text, matches = Matches.shuffle_matches(matches)
+        window['_CONTESTANTSOUT_'].Update(output_text)
 
 
 window.Close()

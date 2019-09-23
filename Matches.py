@@ -1,4 +1,5 @@
 import itertools as it
+from random import shuffle
 
 
 def create_match_schedule(input_text, half_season, full_season):
@@ -7,7 +8,7 @@ def create_match_schedule(input_text, half_season, full_season):
     :param input_text: A multi-line string containing player names
     :param half_season: Boolean if half season was chosen
     :param full_season: Boolean if full season was chosen
-    :return: A multi-line string containing all matches
+    :return: A multi-line string containing all matches, a list (matches) of tuples (players)
     """
     # If an option was chosen
     if half_season or full_season:
@@ -18,14 +19,23 @@ def create_match_schedule(input_text, half_season, full_season):
         # Get all possible combinations of names (matches)
         matches = create_all_matches(player_list, full_season)
 
-        # Get matches into a multi-line string
-        output_text = ''
-        for match in matches:
-            output_text += f"{match[0]} - {match[1]}\n"
+        output_text = matches2str(matches)
 
-        return output_text
+        return output_text, matches
     else:
         return
+
+
+def shuffle_matches(matches):
+    """
+    Shuffle the given matches
+    :param matches: matches to shuffle in the form of a list (matches) of tuples (players)
+    :return: multi-line string containing matches, a list (matches) of tuples (players)
+    """
+    shuffle(matches)
+    output_text = matches2str(matches)
+
+    return output_text, matches
 
 
 def create_all_matches(player_list, full_season):
@@ -49,3 +59,16 @@ def create_all_matches(player_list, full_season):
         print(matches)
 
     return matches
+
+
+def matches2str(matches):
+    """
+    Get matches into a multi-line string
+    :param matches: matches to convert
+    :return: multi-line string containing matches
+    """
+    output_text = ''
+    for match in matches:
+        output_text += f"{match[0]} - {match[1]}\n"
+
+    return output_text
