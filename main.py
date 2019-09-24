@@ -15,6 +15,7 @@ layout = [[sg.Text('Input players\t\tSchedule')],
           [sg.Text('Red - Black\n 0 - 0', font='Consolas 48', size=(16, 3), key='_SCORE_')],
           [sg.Button('Red won'), sg.Button('Draw'), sg.Button('Black won')],
           [sg.Button('Finish', key='_FINISH_'), sg.Button('Undo')],
+          [sg.Multiline(size=(22, 20), disabled=True, key='_RANKINGS_')],
           [sg.Button('Exit')]]
 
 window = sg.Window('CrokinoleChampion', layout)
@@ -44,6 +45,11 @@ while True:  # Event Loop
         output_text_score, match, matches = Matches.initialise_match(matches)
         # Update the score text
         window['_SCORE_'].Update(output_text_score)
+
+        # Get the initial rankings
+        initial_rankings = Matches.initialise_rankings(values['_CONTESTANTSIN_'])
+        # Update the multiline text output with the rankings
+        window['_RANKINGS_'].Update(initial_rankings)
 
     elif event == '_FINISH_':
         # Remove last match

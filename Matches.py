@@ -17,9 +17,9 @@ def create_match_schedule(input_text, half_season, full_season):
         del player_list[-1]
 
         # Get all possible combinations of names (matches)
-        matches = create_all_matches(player_list, full_season)
+        matches = _create_all_matches(player_list, full_season)
 
-        output_text = matches2str(matches)
+        output_text = _matches2str(matches)
 
         return output_text, matches
     else:
@@ -33,7 +33,7 @@ def shuffle_matches(matches):
     :return: multi-line string containing matches, a list (matches) of tuples (players)
     """
     shuffle(matches)
-    output_text = matches2str(matches)
+    output_text = _matches2str(matches)
 
     return output_text, matches
 
@@ -47,7 +47,7 @@ def initialise_match(matches):
     match = matches[0]
     match_formatted_as_matches = [match]
 
-    output_text = matches2str(match_formatted_as_matches)
+    output_text = _matches2str(match_formatted_as_matches)
     output_text = f'Red - Black\n{output_text}0 - 0'
 
     return output_text, match, matches
@@ -61,12 +61,24 @@ def remove_last_match(matches):
     """
     del matches[0]
 
-    output_text = matches2str(matches)
+    output_text = _matches2str(matches)
 
     return output_text, matches
 
 
-def create_all_matches(player_list, full_season):
+def initialise_rankings(input_text):
+    player_list = input_text.split('\n')
+    # delete last empty line
+    del player_list[-1]
+
+    output_text = ''
+    for player in player_list:
+        output_text += f'{player}\t0\n'
+
+    return output_text
+
+
+def _create_all_matches(player_list, full_season):
     """
     Create all combinations of names (matches) either for a half or full season
     :param player_list: A List of player names
@@ -89,7 +101,7 @@ def create_all_matches(player_list, full_season):
     return matches
 
 
-def matches2str(matches):
+def _matches2str(matches):
     """
     Get matches into a multi-line string
     :param matches: matches to convert
