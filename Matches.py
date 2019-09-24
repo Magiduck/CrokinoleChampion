@@ -38,6 +38,16 @@ def shuffle_matches(matches):
     return output_text, matches
 
 
+def initialise_match(matches):
+    match = matches[0]
+    match_formatted_as_matches = [match]
+
+    output_text = matches2str(match_formatted_as_matches)
+    output_text = f'Red - Black\n{output_text}0 - 0'
+
+    return output_text, match, matches
+
+
 def create_all_matches(player_list, full_season):
     """
     Create all combinations of names (matches) either for a half or full season

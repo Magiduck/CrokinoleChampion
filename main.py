@@ -3,14 +3,21 @@ import Matches
 
 sg.change_look_and_feel('Reddit')
 
-layout = [[sg.Multiline(size=(20, 20), key='_CONTESTANTSIN_'),
-           sg.Multiline(size=(20, 20), disabled=True, key='_CONTESTANTSOUT_')],
-          [sg.Radio('Half-season', 'season', key='_HALFSEASON_'), sg.Radio('Full-season', 'season', key='_FULLSEASON_'), sg.Button('Create matches', key='_CREATEMATCHES_')],
-          [sg.Button('Shuffle', key='_SHUFFLE_')],
-          [sg.Button('Show'), sg.Button('Exit')]]
+column_schedule = [[sg.Radio('Half-season', 'season', key='_HALFSEASON_')],
+                   [sg.Radio('Full-season', 'season', key='_FULLSEASON_')],
+                   [sg.Button('Create matches', key='_CREATEMATCHES_')],
+                   [sg.Button('Shuffle', key='_SHUFFLE_')],
+                   [sg.Button('Play season!', key='_PLAYSEASON_')]]
+
+layout = [[sg.Text('Input players\t\tSchedule')],
+          [sg.Multiline(size=(22, 20), key='_CONTESTANTSIN_'),
+           sg.Multiline(size=(22, 20), disabled=True, key='_CONTESTANTSOUT_'), sg.Column(column_schedule)],
+          [sg.Text('Red - Black\n 0 - 0', font='Consolas 48', size=(16, 3), key='_SCORE_')],
+          [sg.Button('Red won'), sg.Button('Draw'), sg.Button('Black won')],
+          [sg.Button('Finish'), sg.Button('Undo')],
+          [sg.Button('Exit')]]
 
 window = sg.Window('CrokinoleChampion', layout)
-
 matches = []
 
 while True:  # Event Loop
@@ -31,5 +38,9 @@ while True:  # Event Loop
         output_text, matches = Matches.shuffle_matches(matches)
         window['_CONTESTANTSOUT_'].Update(output_text)
 
+    elif event == '_PLAYSEASON_':
+        output_text_score, match, matches = Matches.initialise_match(matches)
+        print(output_text_score)
+        window['_SCORE_'].Update(output_text_score)
 
 window.Close()
