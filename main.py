@@ -9,7 +9,7 @@ column_schedule = [[sg.Radio('Half-season', 'season', key='_HALFSEASON_')],
                    [sg.Button('Shuffle', key='_SHUFFLE_')],
                    [sg.Button('Play season!', key='_PLAYSEASON_')]]
 
-layout = [[sg.Text('Input players\t\tSchedule')],
+layout = [[sg.Text('Input players\t\tSchedule              ', key='_MENUTEXT_')],
           [sg.Multiline(size=(22, 20), key='_CONTESTANTSIN_'),
            sg.Multiline(size=(22, 20), disabled=True, key='_CONTESTANTSOUT_'), sg.Column(column_schedule)],
           [sg.Text('Red - Black\n 0 - 0', font='Consolas 48', size=(16, 3), key='_SCORE_')],
@@ -33,6 +33,8 @@ while True:  # Event Loop
         output_text, matches = Matches.create_match_schedule(values['_CONTESTANTSIN_'], values['_HALFSEASON_'], values['_FULLSEASON_'])
         # Update the multiline text output with the matches
         window['_CONTESTANTSOUT_'].Update(output_text)
+        # Update the menu with the amount of matches
+        window['_MENUTEXT_'].Update(f'Input players\t\tSchedule ({len(matches)} matches)')
 
     elif event == '_SHUFFLE_':
         # Shuffle the matches
