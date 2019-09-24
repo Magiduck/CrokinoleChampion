@@ -30,16 +30,30 @@ while True:  # Event Loop
     if event == '_CREATEMATCHES_':
         # Get the matches
         output_text, matches = Matches.create_match_schedule(values['_CONTESTANTSIN_'], values['_HALFSEASON_'], values['_FULLSEASON_'])
-
         # Update the multiline text output with the matches
         window['_CONTESTANTSOUT_'].Update(output_text)
 
     elif event == '_SHUFFLE_':
+        # Shuffle the matches
         output_text, matches = Matches.shuffle_matches(matches)
+        # Update the multiline text output with the matches
         window['_CONTESTANTSOUT_'].Update(output_text)
 
     elif event == '_PLAYSEASON_':
+        # Get first match
         output_text_score, match, matches = Matches.initialise_match(matches)
+        # Update the score text
+        window['_SCORE_'].Update(output_text_score)
+
+    elif event == '_FINISH_':
+        # Remove last match
+        output_text, matches = Matches.remove_last_match(matches)
+        # Update the multiline text output with the matches
+        window['_CONTESTANTSOUT_'].Update(output_text)
+
+        # Get next match
+        output_text_score, match, matches = Matches.initialise_match(matches)
+        # Update the score text
         window['_SCORE_'].Update(output_text_score)
 
 window.Close()

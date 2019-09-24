@@ -41,7 +41,7 @@ def shuffle_matches(matches):
 def initialise_match(matches):
     """
     Initialise match and convert to output_text
-    :param matches:
+    :param matches: a list (matches) of tuples (players)
     :return: multi-line string containing match, a tuple (match), a list (matches) of tuples (players)
     """
     match = matches[0]
@@ -51,6 +51,19 @@ def initialise_match(matches):
     output_text = f'Red - Black\n{output_text}0 - 0'
 
     return output_text, match, matches
+
+
+def remove_last_match(matches):
+    """
+    Remove the most recent match
+    :param matches: a list (matches) of tuples (players)
+    :return: multi-line string containing matches, a list (matches) of tuples (players)
+    """
+    del matches[0]
+
+    output_text = matches2str(matches)
+
+    return output_text, matches
 
 
 def create_all_matches(player_list, full_season):
