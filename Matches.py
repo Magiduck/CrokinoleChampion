@@ -39,6 +39,11 @@ def shuffle_matches(matches):
 
 
 def initialise_match(matches):
+    """
+    Initialise match and convert to output_text
+    :param matches:
+    :return: multi-line string containing match, a tuple (match), a list (matches) of tuples (players)
+    """
     match = matches[0]
     match_formatted_as_matches = [match]
 
