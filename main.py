@@ -1,5 +1,6 @@
 import PySimpleGUI as sg
 import Matches
+import Rankings
 
 sg.change_look_and_feel('Reddit')
 
@@ -49,7 +50,7 @@ while True:  # Event Loop
         window['_SCORE_'].Update(output_text_score)
 
         # Get the initial rankings
-        initial_rankings = Matches.initialise_rankings(values['_CONTESTANTSIN_'])
+        initial_rankings = Rankings.initialise_rankings(values['_CONTESTANTSIN_'])
         # Update the multiline text output with the rankings
         window['_RANKINGS_'].Update(initial_rankings)
 
