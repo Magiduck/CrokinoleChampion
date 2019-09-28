@@ -56,14 +56,17 @@ while True:  # Event Loop
         window['_RANKINGS_'].Update(initial_rankings)
 
     elif event == '_RED_':
+        # Update score text (add 2 to red player)
         score_text = Rankings.update_score(score_text, 'RED')
         window['_SCORE_'].Update(score_text)
 
     elif event == '_DRAW_':
+        # Update score text (add 1 to both players)
         score_text = Rankings.update_score(score_text, 'DRAW')
         window['_SCORE_'].Update(score_text)
 
     elif event == '_BLACK_':
+        # Update score text (add 2 to black player)
         score_text = Rankings.update_score(score_text, 'BLACK')
         window['_SCORE_'].Update(score_text)
 
