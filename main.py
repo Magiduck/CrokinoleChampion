@@ -24,6 +24,7 @@ window = sg.Window('CrokinoleChampion', layout)
 matches = []
 prev_score_text = ''
 score_text = ''
+rankings_text = ''
 
 while True:  # Event Loop
     event, values = window.Read()
@@ -54,6 +55,7 @@ while True:  # Event Loop
 
         # Get the initial rankings
         initial_rankings = Rankings.initialise_rankings(values['_CONTESTANTSIN_'])
+        rankings_text = initial_rankings
         # Update the multiline text output with the rankings
         window['_RANKINGS_'].Update(initial_rankings)
 
@@ -82,10 +84,16 @@ while True:  # Event Loop
         window['_SCORE_'].Update(score_text)
 
     elif event == '_FINISH_':
-        # Remove last match
-        output_text, matches = Matches.remove_last_match(matches)
-        # Update the multiline text output with the matches
-        window['_CONTESTANTSOUT_'].Update(output_text)
+        rankings_text = Rankings.update_rankings(rankings_text, score_text)
+        # Update the multiline text output with the rankings
+        window['_RANKINGS_'].Update(rankings_text)
+
+        # If it is not the last match
+        if len(matches) != 1:
+            # Remove last match
+            output_text, matches = Matches.remove_last_match(matches)
+            # Update the multiline text output with the matches
+            window['_CONTESTANTSOUT_'].Update(output_text)
 
         # Get next match
         score_text, match, matches = Matches.initialise_match(matches)
