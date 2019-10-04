@@ -35,13 +35,14 @@ while True:  # Event Loop
 
     # If the user has clicked on 'create matches'
     if event == '_CREATEMATCHES_':
-        matches_created = True
-        # Get the matches
-        output_text, matches = Matches.create_match_schedule(values['_CONTESTANTSIN_'], values['_HALFSEASON_'], values['_FULLSEASON_'])
-        # Update the multiline text output with the matches
-        window['_CONTESTANTSOUT_'].Update(output_text)
-        # Update the menu with the amount of matches
-        window['_MENUTEXT_'].Update(f'Input players\t\tSchedule ({len(matches)} matches)')
+        if values['_HALFSEASON_'] or values['_FULLSEASON_']:
+            matches_created = True
+            # Get the matches
+            output_text, matches = Matches.create_match_schedule(values['_CONTESTANTSIN_'], values['_HALFSEASON_'], values['_FULLSEASON_'])
+            # Update the multiline text output with the matches
+            window['_CONTESTANTSOUT_'].Update(output_text)
+            # Update the menu with the amount of matches
+            window['_MENUTEXT_'].Update(f'Input players\t\tSchedule ({len(matches)} matches)')
 
     elif event == '_SHUFFLE_' and matches_created:
         # Shuffle the matches
@@ -100,8 +101,9 @@ while True:  # Event Loop
         elif len(matches) == 1 and not win2_active:
             win2_active = True
             window.Hide()
-            layout2 = [[sg.Text('Rankings:')],
-                       [sg.Multiline(rankings_text, size=(22, 10), disabled=True, font='Consolas 18', key='_RANKINGS2_'),]]
+            layout2 = [[sg.Text('Rankings\t\t\t\t'), sg.Text('Input the Finalists in order')],
+                       [sg.Multiline(rankings_text, size=(22, 10), disabled=True, font='Consolas 18', key='_RANKINGS2_'),
+                        sg.Multiline(size=(22, 10), font='Consolas 18', key='_CONTESTANTSIN2_')]]
 
             win2 = sg.Window('Playoffs', layout2)
             while True:
