@@ -10,7 +10,7 @@ column_schedule = [[sg.Radio('Half-season', 'season', key='_HALFSEASON_')],
                    [sg.Button('Shuffle', key='_SHUFFLE_')],
                    [sg.Button('Play season!', key='_PLAYSEASON_')]]
 
-layout = [[sg.Text('Input players\t\tSchedule              ', key='_MENUTEXT_')],
+layout = [[sg.Text('Input players\t\t\t\t  Schedule              ', key='_MENUTEXT_')],
           [sg.Multiline(size=(22, 10), font='Consolas 18', key='_CONTESTANTSIN_'),
            sg.Multiline(size=(22, 10), font='Consolas 18', disabled=True, key='_CONTESTANTSOUT_'), sg.Column(column_schedule)],
           [sg.Text('Red - Black\n 0 - 0', font='Consolas 48', size=(16, 3), key='_SCORE_')],
@@ -101,7 +101,7 @@ while True:  # Event Loop
             win2_active = True
             window.Hide()
             layout2 = [[sg.Text('Rankings:')],
-                       [sg.Multiline(rankings_text, size=(22, 10), disabled=True, font='Consolas 18', key='_RANKINGS2_')]]
+                       [sg.Multiline(rankings_text, size=(22, 10), disabled=True, font='Consolas 18', key='_RANKINGS2_'),]]
 
             win2 = sg.Window('Playoffs', layout2)
             while True:
