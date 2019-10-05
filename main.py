@@ -12,13 +12,13 @@ column_schedule = [[sg.Radio('Half-season', 'season', key='_HALFSEASON_')],
                    [sg.Button('Play season!', key='_PLAYSEASON_')]]
 
 layout = [[sg.Text('Input players\t\t\t\t  Schedule              ', key='_MENUTEXT_')],
-          [sg.Multiline(size=(22, 10), font='Consolas 18', key='_CONTESTANTSIN_'),
-           sg.Multiline(size=(22, 10), font='Consolas 18', disabled=True, key='_CONTESTANTSOUT_'), sg.Column(column_schedule)],
+          [sg.Multiline(size=(22, 8), font='Consolas 24', key='_CONTESTANTSIN_'),
+           sg.Multiline(size=(22, 8), font='Consolas 24', disabled=True, key='_CONTESTANTSOUT_'), sg.Column(column_schedule)],
           [sg.Text('Red - Black\n 0 - 0', font='Consolas 48', size=(16, 3), key='_SCORE_')],
           [sg.Button('Red won', key='_RED_'), sg.Button('Draw', key='_DRAW_'), sg.Button('Black won', key='_BLACK_')],
           [sg.Button('Finish', key='_FINISH_'), sg.Button('Undo', key='_UNDO_')],
           [sg.Text('Rankings:')],
-          [sg.Multiline(size=(22, 10), disabled=True, font='Consolas 18', key='_RANKINGS_')],
+          [sg.Multiline(size=(22, 8), disabled=True, font='Consolas 24', key='_RANKINGS_')],
           [sg.Button('Exit')]]
 
 window = sg.Window('CrokinoleChampion', layout)
@@ -111,8 +111,8 @@ while True:  # Event Loop
             win2_active = True
             window.Hide()
             layout2 = [[sg.Text('Rankings\t\t\t\t'), sg.Text('Input the four Finalists in order')],
-                       [sg.Multiline(rankings_text, size=(22, 10), disabled=True, font='Consolas 18', key='_RANKINGS2_'),
-                        sg.Multiline(size=(22, 10), font='Consolas 18', key='_CONTESTANTSIN2_'),
+                       [sg.Multiline(rankings_text, size=(22, 8), disabled=True, font='Consolas 24', key='_RANKINGS2_'),
+                        sg.Multiline(size=(22, 8), font='Consolas 24', key='_CONTESTANTSIN2_'),
                         sg.Button('Start playoffs', key='_PLAYOFFS_')],
                        [sg.Text('Red - Black\n 0 - 0', font='Consolas 48', size=(16, 3), key='_SCORE2_')],
                        [sg.Button('Red won', key='_RED2_'), sg.Button('Draw', key='_DRAW2_'),
