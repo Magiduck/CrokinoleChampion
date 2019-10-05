@@ -1,6 +1,7 @@
 import PySimpleGUI as sg
 import Matches
 import Rankings
+import Playoffs
 
 sg.change_look_and_feel('Reddit')
 
@@ -25,9 +26,11 @@ matches = []
 prev_score_text = ''
 score_text = ''
 rankings_text = ''
+
 win2_active = False
 matches_created = False
 season_active = False
+
 while True:  # Event Loop
     event, values = window.Read()
     if event in (None, 'Exit'):
@@ -42,7 +45,7 @@ while True:  # Event Loop
             # Update the multiline text output with the matches
             window['_CONTESTANTSOUT_'].Update(output_text)
             # Update the menu with the amount of matches
-            window['_MENUTEXT_'].Update(f'Input players\t\tSchedule ({len(matches)} matches)')
+            window['_MENUTEXT_'].Update(f'Input players\t\t\t\t  Schedule ({len(matches)} matches)')
 
     elif event == '_SHUFFLE_' and matches_created:
         # Shuffle the matches
@@ -98,14 +101,37 @@ while True:  # Event Loop
             output_text, matches = Matches.remove_last_match(matches)
             # Update the multiline text output with the matches
             window['_CONTESTANTSOUT_'].Update(output_text)
+
+            # Get next match
+            score_text, match, matches = Matches.initialise_match(matches)
+            # Update the score text
+            window['_SCORE_'].Update(score_text)
+
         elif len(matches) == 1 and not win2_active:
             win2_active = True
             window.Hide()
-            layout2 = [[sg.Text('Rankings\t\t\t\t'), sg.Text('Input the Finalists in order')],
+            layout2 = [[sg.Text('Rankings\t\t\t\t'), sg.Text('Input the four Finalists in order')],
                        [sg.Multiline(rankings_text, size=(22, 10), disabled=True, font='Consolas 18', key='_RANKINGS2_'),
-                        sg.Multiline(size=(22, 10), font='Consolas 18', key='_CONTESTANTSIN2_')]]
+                        sg.Multiline(size=(22, 10), font='Consolas 18', key='_CONTESTANTSIN2_'),
+                        sg.Button('Start playoffs', key='_PLAYOFFS_')],
+                       [sg.Text('Red - Black\n 0 - 0', font='Consolas 48', size=(16, 3), key='_SCORE2_')],
+                       [sg.Button('Red won', key='_RED2_'), sg.Button('Draw', key='_DRAW2_'),
+                        sg.Button('Black won', key='_BLACK2_')],
+                       [sg.Button('Finish', key='_FINISH2_'), sg.Button('Undo', key='_UNDO2_')],
+                       [sg.Button('Exit')]]
 
             win2 = sg.Window('Playoffs', layout2)
+
+            matches_playoffs = []
+            prev_score_text_playoffs = ''
+            score_text_playoffs = ''
+            rankings_text_playoffs = ''
+            match_counter = 0
+            winner1 = ''
+            winner2 = ''
+
+            playoffs_active = False
+
             while True:
                 event2, values2 = win2.Read()
                 if event2 in (None, 'Exit'):
@@ -114,10 +140,72 @@ while True:  # Event Loop
                     window.UnHide()
                     break
 
-        # Get next match
-        score_text, match, matches = Matches.initialise_match(matches)
-        # Update the score text
-        window['_SCORE_'].Update(score_text)
+                if event2 == '_PLAYOFFS_':
+                    playoffs_active = True
+                    # Get the matches
+                    matches_playoffs = Playoffs.create_playoffs(values2['_CONTESTANTSIN2_'])
+                    # Update score for first match
+                    score_text_playoffs, match_playoffs, matches_playoffs = Matches.initialise_match(matches_playoffs)
+
+                    # Update the score text
+                    win2['_SCORE2_'].Update(score_text_playoffs)
+
+                elif event2 == '_RED2_' and playoffs_active:
+                    # To be able to undo
+                    prev_score_text_playoffs = score_text_playoffs
+
+                    # Update score text (add 2 to red player)
+                    score_text_playoffs = Rankings.update_score(score_text_playoffs, 'RED')
+                    win2['_SCORE2_'].Update(score_text_playoffs)
+
+                elif event2 == '_DRAW2_' and playoffs_active:
+                    # To be able to undo
+                    prev_score_text_playoffs = score_text_playoffs
+
+                    # Update score text (add 1 to both players)
+                    score_text_playoffs = Rankings.update_score(score_text_playoffs, 'DRAW')
+                    win2['_SCORE2_'].Update(score_text_playoffs)
+
+                elif event2 == '_BLACK2_' and playoffs_active:
+                    # To be able to undo
+                    prev_score_text_playoffs = score_text_playoffs
+
+                    # Update score text (add 2 to black player)
+                    score_text_playoffs = Rankings.update_score(score_text_playoffs, 'BLACK')
+                    win2['_SCORE2_'].Update(score_text_playoffs)
+
+                elif event2 == '_FINISH2_' and playoffs_active:
+                    if match_counter == 0:
+                        match_counter += 1
+                        winner1 = Playoffs.determine_winner(score_text_playoffs)
+
+                        # Remove last match
+                        matches_playoffs.pop(0)
+                        # Update score for first match
+                        score_text_playoffs, match_playoffs, matches_playoffs = Matches.initialise_match(
+                            matches_playoffs)
+
+                    elif match_counter == 1:
+                        match_counter += 1
+                        winner2 = Playoffs.determine_winner(score_text_playoffs)
+
+                        matches_playoffs.clear()
+                        matches_playoffs = [(winner1, winner2)]
+                        score_text_playoffs, matches_playoffs, matches_playoffs = Matches.initialise_match(
+                            matches_playoffs)
+
+                    elif match_counter == 2:
+                        match_counter += 1
+                        champion = Playoffs.determine_winner(score_text_playoffs)
+                        sg.Popup(f'Your winner is {champion}!', font='Consolas 48')
+
+                    # Update the score text
+                    win2['_SCORE2_'].Update(score_text_playoffs)
+
+                elif event2 == '_UNDO2_' and playoffs_active:
+                    print('test')
+                    score_text_playoffs = prev_score_text_playoffs
+                    win2['_SCORE2_'].Update(score_text_playoffs)
 
     elif event == '_UNDO_' and season_active:
         score_text = prev_score_text

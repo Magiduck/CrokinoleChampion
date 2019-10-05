@@ -32,7 +32,8 @@ def shuffle_matches(matches):
     :param matches: matches to shuffle in the form of a list (matches) of tuples (players)
     :return: multi-line string containing matches, a list (matches) of tuples (players)
     """
-    shuffle(matches)
+    for i in range(99):
+        shuffle(matches)
     output_text = _matches2str(matches)
 
     return output_text, matches
@@ -84,7 +85,6 @@ def _create_all_matches(player_list, full_season):
             new_matches.append(new_match)
         # And add them to the list of matches
         matches.extend(new_matches)
-        print(matches)
 
     return matches
 

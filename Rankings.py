@@ -23,7 +23,7 @@ def update_score(score_text, who_won):
     :return: output_text for the score
     """
 
-    red, black, score_list = _get_players_and_score(score_text)
+    red, black, score_list = get_players_and_score(score_text)
 
     # Add scores based on Crokinole rules
     if who_won == 'RED':
@@ -48,7 +48,7 @@ def update_rankings(rankings_text, score_text):
     :return: new updated rankings_text
     """
     rankings_list = rankings_text.split('\n')
-    red, black, score_list = _get_players_and_score(score_text)
+    red, black, score_list = get_players_and_score(score_text)
 
     if score_list[0] > score_list[1]:
         _update_rankings_list(rankings_list, red)
@@ -62,7 +62,7 @@ def update_rankings(rankings_text, score_text):
     return output_text
 
 
-def _get_players_and_score(score_text):
+def get_players_and_score(score_text):
     """
     Get the players and the score from the score_text
     :param score_text: multiline string
