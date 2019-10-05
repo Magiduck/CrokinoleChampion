@@ -129,6 +129,8 @@ while True:  # Event Loop
             match_counter = 0
             winner1 = ''
             winner2 = ''
+            loser1 = ''
+            loser2 = ''
 
             playoffs_active = False
 
@@ -177,7 +179,7 @@ while True:  # Event Loop
                 elif event2 == '_FINISH2_' and playoffs_active:
                     if match_counter == 0:
                         match_counter += 1
-                        winner1 = Playoffs.determine_winner(score_text_playoffs)
+                        winner1, loser1 = Playoffs.determine_winner(score_text_playoffs)
 
                         # Remove last match
                         matches_playoffs.pop(0)
@@ -187,16 +189,26 @@ while True:  # Event Loop
 
                     elif match_counter == 1:
                         match_counter += 1
-                        winner2 = Playoffs.determine_winner(score_text_playoffs)
+                        winner2, loser2 = Playoffs.determine_winner(score_text_playoffs)
 
+                        # 3rd place match
                         matches_playoffs.clear()
-                        matches_playoffs = [(winner1, winner2)]
-                        score_text_playoffs, matches_playoffs, matches_playoffs = Matches.initialise_match(
+                        matches_playoffs = [(loser1, loser2)]
+                        score_text_playoffs, match_playoffs, matches_playoffs = Matches.initialise_match(
                             matches_playoffs)
 
                     elif match_counter == 2:
                         match_counter += 1
-                        champion = Playoffs.determine_winner(score_text_playoffs)
+
+                        # 1st place match
+                        matches_playoffs.clear()
+                        matches_playoffs = [(winner1, winner2)]
+                        score_text_playoffs, match_playoffs, matches_playoffs = Matches.initialise_match(
+                            matches_playoffs)
+
+                    elif match_counter == 3:
+                        match_counter += 1
+                        champion, loser = Playoffs.determine_winner(score_text_playoffs)
                         sg.Popup(f'Your winner is {champion}!', font='Consolas 48')
 
                     # Update the score text

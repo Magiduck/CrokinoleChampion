@@ -20,6 +20,6 @@ def determine_winner(input_text):
     red, black, score_list = Rankings.get_players_and_score(input_text)
 
     if score_list[0] > score_list[1]:
-        return red
+        return red, black
     elif score_list[0] < score_list[1]:
-        return black
+        return black, red
